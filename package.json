@@ -2,7 +2,7 @@
   "name": "yt-search-extension",
   "version": "1.0.0",
   "description": "A chrome extesion to search and jump to in subtitles",
-  "main": "search.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,6 +22,10 @@
   },
   "homepage": "https://github.com/Sufiyan1997/yt-search-extension#readme",
   "dependencies": {
-    "xml2js": "^0.4.23"
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "webpack": "^5.36.1",
+    "webpack-cli": "^4.6.0"
   }
 }

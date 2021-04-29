@@ -1,52 +1,4 @@
-const fs = require('fs');
-const xml2js = require('xml2js');
-
-var parser = new xml2js.Parser();
-
-async function readDocsFromFile(fileName) {
-    let docs = [];
-    let contents = await fs.promises.readFile(fileName);
-    parser.parseString(contents, (err, results) => {
-        docs = results.transcript.text.map(node => node._);
-    })
-    return docs;
-}
-
-function tokenize(doc) {
-    doc = doc.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-    doc = doc.toLowerCase();
-    return doc.split(/\s+/);
-}
-
-function addDocToIndex(index, doc, docId) {
-    let tokens = tokenize(doc);
-    for (let i = 0; i < tokens.length; ++i) {
-        let token = tokens[i];
-        let docToPositionsMap = null;
-        if (index.has(token)) {
-            docToPositionsMap = index.get(token);
-        }
-        else {
-            docToPositionsMap = new Map();
-            index.set(token, docToPositionsMap);
-        }
-        if (docToPositionsMap.has(docId)) {
-            docToPositionsMap.get(docId).push(i);
-        }
-        else {
-            docToPositionsMap.set(docId, [i]);
-        }
-    }
-}
-
-function buildIndex(docs) {
-    let index = new Map();
-    for (let i = 0; i < docs.length; ++i) {
-        addDocToIndex(index, docs[i], i);
-    }
-    return index;
-}
-
+import {tokenize} from './indexing';
 function search(query, index) {
     let queryTokens = tokenize(query);
 
@@ -128,14 +80,5 @@ function checkOccuranceDistanceIsCompatible(arr1, arr2) {
     return false;
 }
 
-(async () => {
-    let docs = await readDocsFromFile(__dirname + '/timedtext.xml');
-    let index = buildIndex(docs);
-    
-    let query = "hearing mother";
-    const searchResults = search(query, index);
-
-    console.log(docs[searchResults[0]]);
-
-})();
+export {search};
 
