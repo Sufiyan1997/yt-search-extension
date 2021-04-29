@@ -1,0 +1,27 @@
+{
+  "name": "yt-search-extension",
+  "version": "1.0.0",
+  "description": "A chrome extesion to search and jump to in subtitles",
+  "main": "search.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sufiyan1997/yt-search-extension.git"
+  },
+  "keywords": [
+    "chrome extension",
+    "youtube",
+    "information retrieval"
+  ],
+  "author": "Sufiyan Gani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sufiyan1997/yt-search-extension/issues"
+  },
+  "homepage": "https://github.com/Sufiyan1997/yt-search-extension#readme",
+  "dependencies": {
+    "xml2js": "^0.4.23"
+  }
+}
