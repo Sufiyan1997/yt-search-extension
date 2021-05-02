@@ -2,6 +2,9 @@ import axios from 'axios';
 import {buildIndex} from './indexing';
 import {search} from './search';
 
+let index = null;
+let docs = null;
+
 async function readDocsFromURL(url) {
     const resp = await axios.get(url, {responseType: 'document'});
     const textElements = resp.data.querySelectorAll('text');
@@ -16,13 +19,31 @@ async function readDocsFromURL(url) {
     return docs;
 }
 
+function displayResults(results) {
+    let resultListElem = document.getElementById("resultList");
+    resultListElem.innerHTML = "";
+    for (let result of results) {
+        let li = document.createElement("li");
+        li.innerHTML = docs[result].text;
+        resultListElem.appendChild(li);
+    }
+}
+
 (async () => {
-    const docs = await readDocsFromURL("https://video.google.com/timedtext?lang=en&v=AJ38l6DX4f8");
-    let index = buildIndex(docs);
-    let query = "hearing mother";
-    const searchResults = search(query, index);
-
-    console.log(docs[searchResults[0]]);
-    console.log(docs);
-
+    docs = await readDocsFromURL("https://video.google.com/timedtext?lang=en&v=AJ38l6DX4f8");
+    index = buildIndex(docs);
 })();
+
+document.addEventListener("DOMContentLoaded", function(){
+    let searchBtn = document.getElementById("searchBtn");
+    let searchBox = document.getElementById("searchBox");
+
+    searchBtn.addEventListener("click", function () {
+
+        // TODO: Display proper error
+        if (!index) return;
+
+        let results = search(searchBox.value, index);
+        displayResults(results);
+    });
+});
